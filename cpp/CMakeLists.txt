@@ -10,7 +10,8 @@ ENDIF()
 
 # simple example
 FIND_PACKAGE( OpenCV REQUIRED )
-INCLUDE_DIRECTORIES(${OPENCV_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
+LINK_DIRECTORIES(${OpenCV_LIB_DIR})
 
 if(${OpenCV_VERSION_MINOR} LESS 3) 
     set(${PROJECT_NAME}_simple_example_srcs simple_example.cpp)

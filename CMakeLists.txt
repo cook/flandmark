@@ -15,6 +15,10 @@ ENDIF(NOT CMAKE_BUILD_TYPE)
 OPTION(BUILD_MATLAB_BINDINGS "Build Matlab bindings" ON)
 SET(FLANDMARK_LEARNING_DIR "${PROJECT_SOURCE_DIR}/learning" CACHE STRING "Directory where will be copyied mex files")
 
+#set (EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin/)
+#set (LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin/)
+
+
 ADD_SUBDIRECTORY(cpp)
 
 # copy some important files to the binary directory
