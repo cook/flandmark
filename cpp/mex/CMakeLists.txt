@@ -1,5 +1,6 @@
 FIND_PACKAGE( OpenCV REQUIRED )
-INCLUDE_DIRECTORIES(${OPENCV_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
+LINK_DIRECTORIES(${OpenCV_LIB_DIR})
 
 if(WIN32)
     find_program(MEX_CMD mex.bat)
@@ -99,11 +100,17 @@ if(MEX_CMD AND MEXEXT_CMD)
 	        )
 
         else(${OpenCV_VERSION_MINOR} LESS 3)
+          foreach (inc ${OpenCV_INCLUDE_DIRS})
+            set (cvinc -I${inc} ${cvinc})
+          endforeach ()
+          foreach (dir ${OpenCV_LIB_DIR})
+            set (cvlibdir -L${dir} ${cvlibdir})
+          endforeach ()
 
 	        ADD_CUSTOM_COMMAND(
 	            OUTPUT ${MEX_FILE_flandmark_detector}
 	            COMMAND ${MEX_REAL_CMD}
-	            ARGS -largeArrayDims ${CMAKE_CURRENT_SOURCE_DIR}/flandmark_detector_mex.cpp -I${PROJECT_SOURCE_DIR}/cpp/libflandmark -I${OpenCV_INSTALL_PATH}/include/opencv -L${PROJECT_BINARY_DIR}/cpp/libflandmark -lflandmark_static -lopencv_core -lopencv_imgproc -o ${MEX_NAME_flandmark_detector}
+	            ARGS -largeArrayDims ${CMAKE_CURRENT_SOURCE_DIR}/flandmark_detector_mex.cpp -I${PROJECT_SOURCE_DIR}/cpp/libflandmark ${cvinc} ${cvlibdir} -L${PROJECT_BINARY_DIR}/cpp/libflandmark -lflandmark_static -lopencv_core -lopencv_imgproc -o ${MEX_NAME_flandmark_detector}
 	            DEPENDS flandmark_static ${CMAKE_CURRENT_SOURCE_DIR}/${MEX_NAME_flandmark_detector}_mex.cpp
 	            COMMENT "Building MEX extension ${MEX_FILE_flandmark_detector}"
 	        )
@@ -111,7 +118,7 @@ if(MEX_CMD AND MEXEXT_CMD)
 	        ADD_CUSTOM_COMMAND(
 	            OUTPUT ${MEX_FILE_flandmark_detector_base}
 	            COMMAND ${MEX_REAL_CMD}
-	            ARGS -largeArrayDims ${CMAKE_CURRENT_SOURCE_DIR}/flandmark_detector_base_mex.cpp -I${PROJECT_SOURCE_DIR}/cpp/libflandmark -I${OpenCV_INSTALL_PATH}/include/opencv -L${PROJECT_BINARY_DIR}/cpp/libflandmark -lflandmark_static -lopencv_core -lopencv_imgproc -o ${MEX_NAME_flandmark_detector_base}
+	            ARGS -largeArrayDims ${CMAKE_CURRENT_SOURCE_DIR}/flandmark_detector_base_mex.cpp -I${PROJECT_SOURCE_DIR}/cpp/libflandmark ${cvinc} ${cvlibdir} -L${PROJECT_BINARY_DIR}/cpp/libflandmark -lflandmark_static -lopencv_core -lopencv_imgproc -o ${MEX_NAME_flandmark_detector_base}
 	            DEPENDS flandmark_static ${CMAKE_CURRENT_SOURCE_DIR}/${MEX_NAME_flandmark_detector_base}_mex.cpp
 	            COMMENT "Building MEX extension ${MEX_FILE_flandmark_detector_base}"
 	        )
@@ -119,7 +126,7 @@ if(MEX_CMD AND MEXEXT_CMD)
 	        ADD_CUSTOM_COMMAND(
 	            OUTPUT ${MEX_FILE_flandmark_load_model}
 	            COMMAND ${MEX_REAL_CMD}
-	            ARGS -largeArrayDims ${CMAKE_CURRENT_SOURCE_DIR}/flandmark_load_model_mex.cpp -I${PROJECT_SOURCE_DIR}/cpp/libflandmark/ -I${OpenCV_INSTALL_PATH}/include/opencv -L${PROJECT_BINARY_DIR}/cpp/libflandmark -lflandmark_static -lopencv_core -lopencv_imgproc -o ${MEX_NAME_flandmark_load_model}
+	            ARGS -largeArrayDims ${CMAKE_CURRENT_SOURCE_DIR}/flandmark_load_model_mex.cpp -I${PROJECT_SOURCE_DIR}/cpp/libflandmark/ ${cvinc} ${cvlibdir} -L${PROJECT_BINARY_DIR}/cpp/libflandmark -lflandmark_static -lopencv_core -lopencv_imgproc -o ${MEX_NAME_flandmark_load_model}
 	            DEPENDS flandmark_static ${CMAKE_CURRENT_SOURCE_DIR}/${MEX_NAME_flandmark_load_model}_mex.cpp
 	            COMMENT "Building MEX extension ${MEX_FILE_flandmark_load_model}"
 	        )
@@ -141,8 +148,8 @@ if(MEX_CMD AND MEXEXT_CMD)
 	        ADD_CUSTOM_COMMAND(
 	            OUTPUT ${MEX_FILE_getNF}
 	            COMMAND ${MEX_REAL_CMD}
-	            ARGS -largeArrayDims ${CMAKE_CURRENT_SOURCE_DIR}/getNormalizedFrame_mex.cpp -I${PROJECT_SOURCE_DIR}/cpp/libflandmark/ -I${OpenCV_INSTALL_PATH}/include/opencv -L${PROJECT_BINARY_DIR}/cpp/libflandmark -lflandmark_static -lopencv_core -lopencv_imgproc -o ${MEX_NAME_getNF}
-	            #ARGS -largeArrayDims ${CMAKE_CURRENT_SOURCE_DIR}/getNormalizedFrame_mex.cpp -I${PROJECT_SOURCE_DIR}/cpp/libflandmark/ -I${OpenCV_INSTALL_PATH}/include/opencv -L${PROJECT_BINARY_DIR}/libflandmark -lflandmark_static -lopencv_core -lopencv_imgproc -lopencv_highgui -o ${MEX_NAME_getNF}
+	            ARGS -largeArrayDims ${CMAKE_CURRENT_SOURCE_DIR}/getNormalizedFrame_mex.cpp -I${PROJECT_SOURCE_DIR}/cpp/libflandmark/ ${cvinc} ${cvlibdir} -L${PROJECT_BINARY_DIR}/cpp/libflandmark -lflandmark_static -lopencv_core -lopencv_imgproc -o ${MEX_NAME_getNF}
+	            #ARGS -largeArrayDims ${CMAKE_CURRENT_SOURCE_DIR}/getNormalizedFrame_mex.cpp -I${PROJECT_SOURCE_DIR}/cpp/libflandmark/ ${cvinc} ${cvlibdir} -L${PROJECT_BINARY_DIR}/libflandmark -lflandmark_static -lopencv_core -lopencv_imgproc -lopencv_highgui -o ${MEX_NAME_getNF}
 	            DEPENDS flandmark_static ${CMAKE_CURRENT_SOURCE_DIR}/${MEX_NAME_getNF}_mex.cpp
 	            COMMENT "Building MEX extension ${MEX_FILE_getNF}"
 	        )
